@@ -26,7 +26,7 @@ javac src/raytracer/*.java src/raytracer/pigments/*.java src/raytracer/shapes/*.
 Usage
 =====
 After making, you can simply run the application using java as follows:
-java -Djava.awt.headless=true -cp src raytracer.Main test05.txt test05.bmp 400 300
+ja
 
 The -Djava.awt.headless=true flag alerts java not to popup a Java window. 
 This is especially useful when running the command on a terminal or in an ssh 

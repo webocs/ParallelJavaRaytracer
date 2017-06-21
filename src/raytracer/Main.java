@@ -2,6 +2,7 @@ package raytracer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -62,6 +63,7 @@ public class Main {
 		if(DEBUG) {
 			while(true) {
 				Scanner scanner = new Scanner(System.in);
+				scanner.useLocale(Locale.US);
 				System.out.println("Input column and row of pixel (relative to upper left corner):");
 				int col = scanner.nextInt();
 				int row = scanner.nextInt();

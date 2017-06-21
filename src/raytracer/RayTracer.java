@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -144,7 +145,7 @@ public class RayTracer {
 			}
 
 			executor.shutdown();
-			executor.awaitTermination(5, TimeUnit.MINUTES);
+			executor.awaitTermination(5, TimeUnit.SECONDS);
 		} else {
 			for(int r = 0;r < rows; r++) {
 				if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
@@ -195,7 +196,14 @@ public class RayTracer {
 
 		// read lights
 		int numLights = scanner.nextInt();
-		if(numLights > 0) lights.add(new AmbientLight(readPoint(scanner), readColor(scanner), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+		if(numLights > 0) {
+			Point p =readPoint(scanner);
+			Color c=readColor(scanner);
+			float f1=scanner.nextFloat();
+			float f2=scanner.nextFloat();
+			float f3=scanner.nextFloat();
+			lights.add(new AmbientLight(p,c,f1,f2,f3));
+		}
 		for(int i=1;i<numLights;i++) {
 			lights.add(new Light(readPoint(scanner), readColor(scanner), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
 		}
@@ -273,12 +281,20 @@ public class RayTracer {
 	}
 
 	private static Color readColor(Scanner scanner) {
-		return new Color(ColorUtil.clamp(scanner.nextFloat()), ColorUtil.clamp(scanner.nextFloat()), ColorUtil.clamp(scanner.nextFloat()));
+		scanner.useLocale(Locale.US);
+		float r=scanner.nextFloat();
+		float g=scanner.nextFloat();
+		float b=scanner.nextFloat();
+
+		return new Color(ColorUtil.clamp(r),g,b);
 	}
 	private static Vector readVector(Scanner scanner) {
 		return new Vector(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble());
 	}
 	private static Point readPoint(Scanner scanner) {
-		return new Point(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble());
+		double d1=scanner.nextDouble();
+		double d2=scanner.nextDouble();
+		double d3=scanner.nextDouble();
+		return new Point(d1,d2,d3);
 	}
 }
