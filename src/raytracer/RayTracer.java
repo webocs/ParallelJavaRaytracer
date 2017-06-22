@@ -13,7 +13,7 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RayTracer {
+public class RayTracer{
 	public static final int MAX_RECURSION_LEVEL = 5;
 	public static final Color BACKGROUND_COLOR = Color.GRAY;
 
@@ -23,10 +23,38 @@ public class RayTracer {
 	private final ArrayList<Finish> finishes = new ArrayList<Finish>();
 	private final ArrayList<Shape> shapes = new ArrayList<Shape>();
 	private final int cols, rows;
+	private final BufferedImage image;
 
-	public RayTracer(int cols, int rows) {
+
+	protected class BucketRenderer extends RecursiveAction{
+		protected int sThreshold = 100000;
+
+
+		//ACA QUEDEE!! HACER ESTO RECURSIVO Y RECURRENTe
+		protected void compute() {
+		if (cols < sThreshold) {
+			computeDirectly();
+			return;
+		}
+
+		int split = mLength / 2;
+
+		invokeAll(new ForkBlur(mSource, mStart, split, mDestination),
+				new ForkBlur(mSource, mStart + split, mLength - split,
+						mDestination));
+		}
+
+
+	}
+
+	public RayTracer(int xstart, int ystart, int cols, int rows, BufferedImage img) {
 		this.cols = cols;
 		this.rows = rows;
+			image= new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
+		/*else {
+			image.setRGB(xstart, ystart, cols, rows, img.getSubimage(xstart, ystart, rows, cols), 0, 1);
+		}*/
+
 	}
 
 
@@ -125,7 +153,7 @@ public class RayTracer {
 
 
 	public void draw(File outFile) throws IOException, InterruptedException {
-		final BufferedImage image = new BufferedImage(cols, rows, BufferedImage.TYPE_INT_RGB);
+
 
 		long start = System.currentTimeMillis();
 
@@ -143,10 +171,10 @@ public class RayTracer {
 					});
 				}
 			}
-
 			executor.shutdown();
 			executor.awaitTermination(5, TimeUnit.SECONDS);
 		} else {
+
 			for(int r = 0;r < rows; r++) {
 				if(r % 5 == 0) Log.info((rows - r) + " rows left to trace.");
 				for(int c = 0;c < cols; c++) {
@@ -297,4 +325,8 @@ public class RayTracer {
 		double d3=scanner.nextDouble();
 		return new Point(d1,d2,d3);
 	}
+
+
+
+
 }
