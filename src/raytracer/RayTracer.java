@@ -24,7 +24,7 @@ public class RayTracer{
 	private final ArrayList<Shape> shapes = new ArrayList<Shape>();
 	private final int cols, rows;
 	private final BufferedImage image;
-
+/*
 
 	protected class BucketRenderer extends RecursiveAction{
 		protected int sThreshold = 100000;
@@ -45,7 +45,7 @@ public class RayTracer{
 		}
 
 
-	}
+	}*/
 
 	public RayTracer(int xstart, int ystart, int cols, int rows, BufferedImage img) {
 		this.cols = cols;

@@ -1,5 +1,6 @@
 package raytracer;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -58,7 +59,9 @@ public class Main {
 			}
 		}
 
-		RayTracer rayTracer = new RayTracer(cols, rows);
+		BufferedImage img = null;
+
+		RayTracer rayTracer = new RayTracer(0,0,cols, rows, img);
 		rayTracer.readScene(inFile);
 		if(DEBUG) {
 			while(true) {
